@@ -18,11 +18,13 @@ When you have multiple meetings, workshops or events and you want to create meet
 ## Features
 
 ⌨️ `ctrl + shift + M` to fire Meeteor
+
 ⑉ Change Account Id to create meeting from different profile
+
 🔇 Toggle Mic and Video before joining meeting
+
 📋 Meeting URL copied to clipboard
+
 ⚡️ Join meetings in 2 keystrokes
 
 This extension triggers a popup page. You simply click the extension icon in the top right or press `Ctrl+Shift+M` to toggle the page popup.
-
-To trigger the extension, simply click the extension icon.
