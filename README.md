@@ -1,6 +1,6 @@
 # Meeteor ⚡️ 
 
-Chrome extension for Google Meet, create and join meting with just two keyboard shortcuts.
+Chrome extension for Google Meet, create and join meeting with just two keyboard shortcuts.
 
 
 ## Description
