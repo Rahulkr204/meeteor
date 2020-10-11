@@ -1,7 +1,6 @@
 const STORAGE_KEY = "meeteor_testing"
 const MEET_ELEMENTS = {
-    JOIN: 'Join now',
-    mute:
+    JOIN: 'Join now'
 }
 var meetingUrl = null;
 
@@ -54,15 +53,6 @@ function getElement(searchText) {
 
 function joinMeeting() {
     const joinElement = getElement(MEET_ELEMENTS.JOIN).then(res => {
-        if (res) {
-            res.focus()
-            res.click()
-        }
-    })
-}
-
-function mute() {
-    const muteButton = getElement(MEET_ELEMENTS.).then(res => {
         if (res) {
             res.focus()
             res.click()

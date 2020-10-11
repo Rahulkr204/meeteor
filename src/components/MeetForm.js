@@ -13,10 +13,11 @@ const MeetForm = props => {
 
     const getFormData = async () => {
         chrome.storage.sync.get(STORAGE_KEY, function(items) {
-            console.log(STORAGE_KEY, items);
-            const {accountId, shouldCopy} = items[STORAGE_KEY]
-            setAccountId(accountId)
-            setShouldCopy(shouldCopy)
+            if (items && Object.keys(items).length) {
+                const {accountId, shouldCopy} = items[STORAGE_KEY]
+                setAccountId(accountId)
+                setShouldCopy(shouldCopy)
+            }
         });
     }
 
