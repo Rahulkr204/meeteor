@@ -1,18 +1,19 @@
-const STORAGE_KEY = 'meeteor_testing';
+const STORAGE_KEY = "meeteor";
 const MEET_ELEMENTS = {
-  JOIN: 'Join now',
+  JOIN: "Join now"
 };
 const MEET_QUERY = {
-  JOIN_BTN: '[role=button]',
+  JOIN_BTN: "[role=button]",
   MIC_BTN: `div[data-tooltip~=microphone]`,
   VIDEO_BTN: `div[data-tooltip~=camera]`,
+  CLOSE_BTN: `div[aria-label="Close"]`
 };
 
 var meetingUrl = null;
 
 // Get meet link from DOM
 function getMeetingURL() {
-  const documentText = window.document.body.innerText.split('\n');
+  const documentText = window.document.body.innerText.split("\n");
   const meetURL = documentText.find((i) => {
     if (i.indexOf(`meet.google.com`) !== -1) {
       return i;
@@ -21,26 +22,27 @@ function getMeetingURL() {
   chrome.storage.sync.get(STORAGE_KEY, function (items) {
     const data = items ? items[STORAGE_KEY] : {};
     // Copy Meet URL
-    console.log(data)
-    debugger
+    console.log(data);
     if (data.shouldCopy && meetURL) {
       meetingUrl = meetURL;
       copyToClipboard(meetURL);
     }
-    Object.keys(data).forEach(i => {
-      debugger
+    Object.keys(data).forEach((i) => {
       switch (i) {
-        case 'mute':
+        case "mute":
           data[i] && mute();
-        case 'disableVideo':
+        case "disableVideo":
           data[i] && disableVideo();
-        case 'shouldCopy':
-          (data[i] && meetURL) && copyToClipboard(meetURL);
+        case "shouldCopy":
+          data[i] && meetURL && copyToClipboard(meetURL);
         default:
           break;
       }
-    })
+    });
     joinMeeting();
+    setTimeout(() => {
+      closeAddOthersModal();
+    }, 1500);
   });
 }
 
@@ -51,11 +53,11 @@ window.onload = function () {
 };
 
 function copyToClipboard(text) {
-  var input_temp = document.createElement('input');
+  var input_temp = document.createElement("input");
   input_temp.value = text;
   document.body.appendChild(input_temp);
   input_temp.select();
-  document.execCommand('copy');
+  document.execCommand("copy");
   document.body.removeChild(input_temp);
 }
 
@@ -78,14 +80,12 @@ function getElement(query, searchText) {
 }
 
 function joinMeeting() {
-  getElement(MEET_QUERY.JOIN_BTN, MEET_ELEMENTS.JOIN).then(
-    (res) => {
-      if (res) {
-        res.focus();
-        res.click();
-      }
+  getElement(MEET_QUERY.JOIN_BTN, MEET_ELEMENTS.JOIN).then((res) => {
+    if (res) {
+      res.focus();
+      res.click();
     }
-  );
+  });
 }
 
 function mute() {
@@ -105,3 +105,14 @@ function disableVideo() {
     }
   });
 }
+
+function closeAddOthersModal() {
+  getElement(MEET_QUERY.CLOSE_BTN).then((res) => {
+    console.log(res, "res");
+    if (res) {
+      res.focus();
+      res.click();
+    }
+  });
+}
+

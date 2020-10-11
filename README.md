@@ -3,9 +3,8 @@
 Chrome extension for Google Meet, create meeting using keyboard.
 
 ## Description
-When you can have multiple impromp-tu meetings in a day and you
-want to create meetings on the fly, going through official process takes about 15-20s to join a meeting and have a shareable link. With Meeteor, you can cut down that to 3-5s.
-
+When you might have multiple impromptu meetings in a day and you
+want to create meetings on the fly, going through official process takes about 15-20s to join a meeting and have a shareable link. With Meeteor, you can cut that down to 3-5s.
 
 ## Install
 

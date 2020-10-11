@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React from 'react';
+import React from "react";
 import {
   Box,
   Input,
@@ -9,43 +9,36 @@ import {
   Text,
   Checkbox,
   Icon,
-  Tooltip,
-  Code,
-} from '@chakra-ui/core';
-import { STORAGE_KEY } from '../utils/storage';
-import '../css/index.css';
+  Code
+} from "@chakra-ui/core";
+import { STORAGE_KEY } from "../utils/storage";
+import "../css/index.css";
 
 const MeetForm = (props) => {
-  const [accountId, setAccountId] = React.useState(0);
-  const [shouldCopy, setShouldCopy] = React.useState(true);
   const [showHelp, toggleHelp] = React.useState(false);
-  const [mute, toggleMic] = React.useState(true);
-  const [disableVideo, toggleVideo] = React.useState(true);
-
   const [formData, setFormData] = React.useState({
     accountId: 0,
     shouldCopy: true,
     mute: true,
     disableVideo: true
-  })
+  });
 
   const btnRef = React.createRef();
 
   const updateFormData = (params) => {
-    let state = formData
-    Object.keys(params).forEach(i => {
-      state = {...state, [i]: params[i]}
-    })
-    chrome.storage.sync.set({ [STORAGE_KEY]: state }, function () {
-      console.log('Saved config', state)
-      setFormData(state)
+    let state = formData;
+    Object.keys(params).forEach((i) => {
+      state = { ...state, [i]: params[i] };
     });
-  }
+    chrome.storage.sync.set({ [STORAGE_KEY]: state }, function () {
+      setFormData(state);
+    });
+  };
 
   const getFormData = async () => {
     chrome.storage.sync.get(STORAGE_KEY, function (items) {
       if (items && Object.keys(items).length) {
-        setFormData(items[STORAGE_KEY])
+        setFormData(items[STORAGE_KEY]);
       }
     });
   };
@@ -58,8 +51,8 @@ const MeetForm = (props) => {
   const gotoMeeting = async () => {
     // const meetingDetails = { accountId, shouldCopy };
     chrome.storage.sync.set({ [STORAGE_KEY]: formData }, function () {
-      const meetingURL = `https://meet.google.com/new?authuser=${accountId}`;
-      window.open(meetingURL, '_blank');
+      const meetingURL = `https://meet.google.com/new?authuser=${formData.accountId}`;
+      window.open(meetingURL, "_blank");
     });
   };
 
@@ -73,7 +66,7 @@ const MeetForm = (props) => {
             marginX="4px"
             size="sm"
             value={formData.accountId}
-            onChange={(e) => updateFormData({accountId: e.target.value})}
+            onChange={(e) => updateFormData({ accountId: e.target.value })}
             placeholder="Enter account id"
           />
           <Icon
@@ -88,7 +81,7 @@ const MeetForm = (props) => {
         <Checkbox
           isChecked={formData.shouldCopy}
           onChange={(e) => {
-            updateFormData({shouldCopy: e.target.checked});
+            updateFormData({ shouldCopy: e.target.checked });
           }}
           size="sm"
           variantColor="teal"
@@ -101,7 +94,7 @@ const MeetForm = (props) => {
         <Checkbox
           isChecked={formData.mute}
           onChange={(e) => {
-            updateFormData({'mute': e.target.checked})
+            updateFormData({ mute: e.target.checked });
           }}
           size="sm"
           variantColor="teal"
@@ -114,7 +107,7 @@ const MeetForm = (props) => {
         <Checkbox
           isChecked={formData.disableVideo}
           onChange={(e) => {
-            updateFormData({'disableVideo': e.target.checked})
+            updateFormData({ disableVideo: e.target.checked });
           }}
           size="sm"
           variantColor="teal"
@@ -132,7 +125,7 @@ const MeetForm = (props) => {
           w="100%"
           variantColor="teal"
         >
-          Join Meeting <span className="btnDescription">(Press ⏎)</span>{' '}
+          Join Meeting <span className="btnDescription">(Press ⏎)</span>{" "}
         </Button>
       </Box>
     </Box>
@@ -169,7 +162,7 @@ const UserIdHelp = () => {
         color="gray.100"
         children={
           <p>
-            {' '}
+            {" "}
             https://meet.google.com/{<strong>meeting_id</strong>}?authuser=
             {<strong>user_id</strong>}
           </p>
