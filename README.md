@@ -2,7 +2,7 @@
 
 Chrome extension for Google Meet, create and join meting with just two keyboard shortcuts.
 
-![Meeteor Popup]('/screenshot.png')
+![Meeteor Popup]('screenshot.png')
 ***
 
 ## Description
