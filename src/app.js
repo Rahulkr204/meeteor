@@ -1,9 +1,7 @@
-/*global chrome*/
 import React from 'react';
 import './css/index.css';
 import MeetForm from './components/MeetForm'
-import { Box, Heading, ThemeProvider, CSSReset, Button } from "@chakra-ui/core";
-import {setStorageData, STORAGE_KEY, setData, getData} from './utils/storage'
+import { Box, Heading, ThemeProvider, CSSReset } from "@chakra-ui/core";
 
 const App = () => {    
 	return (

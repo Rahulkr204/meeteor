@@ -2,5 +2,5 @@
 const STORAGE_KEY = 'meeteor_testing'
 
 export {
-    STORAGE_KEY,
+    STORAGE_KEY
 }

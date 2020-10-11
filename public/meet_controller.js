@@ -1,9 +1,16 @@
 const STORAGE_KEY = "meeteor_testing"
 const MEET_ELEMENTS = {
-    JOIN: 'Join now'
+    JOIN: 'Join now',
+    MUTE: ''
 }
+const MEET_QUERY = {
+    JOIN_BTN: '[role=button]',
+    MUTE_BTN: `div[data-tooltip~=microphone]`
+}
+
 var meetingUrl = null;
 
+// Get meet link from DOM
 function getMeetingURL() {
     const documentText = window.document.body.innerText.split("\n")
     const meetURL = documentText.find(i => {
@@ -13,11 +20,13 @@ function getMeetingURL() {
     })
     chrome.storage.sync.get(STORAGE_KEY, function(items) {
         const data = items ? items[STORAGE_KEY] : {}
+        // Copy Meet URL
         if (data.shouldCopy && meetURL) {
             meetingUrl = meetURL
             copy_function(meetURL);
-            joinMeeting()
         }
+        // Join Meeting
+        joinMeeting()
     });
 }
 
@@ -36,9 +45,9 @@ function copy_function(text){
     document.body.removeChild(input_temp);
 };
 
-function getElement(searchText) {
+function getElement(query, searchText) {
     return new Promise(resolve => {
-        const aTags = document.querySelectorAll('[role=button]');
+        const aTags = document.querySelectorAll(query);
         let found;
         for (var i = 0; i < aTags.length; i++) {
             if (aTags[i].textContent == searchText) {
@@ -52,10 +61,19 @@ function getElement(searchText) {
 }
 
 function joinMeeting() {
-    const joinElement = getElement(MEET_ELEMENTS.JOIN).then(res => {
+    const joinElement = getElement(MEET_QUERY.JOIN_BTN, MEET_ELEMENTS.JOIN).then(res => {
         if (res) {
             res.focus()
             res.click()
+        }
+    })
+}
+
+function mute() {
+    getElement(MEET_QUERY.MUTE_BTN, MEET_ELEMENTS.MUTE).then(res => {
+        console.log("mute", res)
+        if (res) {
+            debugger
         }
     })
 }
