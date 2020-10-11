@@ -1,75 +1,182 @@
 /*global chrome*/
 
-import React from 'react'
-import { Box, Input, Button, Stack, Text, Checkbox, Icon, Tooltip, Code } from "@chakra-ui/core";
-import {STORAGE_KEY} from '../utils/storage'
-import '../css/index.css'
+import React from 'react';
+import {
+  Box,
+  Input,
+  Button,
+  Stack,
+  Text,
+  Checkbox,
+  Icon,
+  Tooltip,
+  Code,
+} from '@chakra-ui/core';
+import { STORAGE_KEY } from '../utils/storage';
+import '../css/index.css';
 
-const MeetForm = props => {
-    const [accountId, setAccountId] = React.useState(0);
-    const [shouldCopy, setShouldCopy] = React.useState(true);
-    const [showHelp, toggleHelp] = React.useState(false);
-    const btnRef = React.createRef()
+const MeetForm = (props) => {
+  const [accountId, setAccountId] = React.useState(0);
+  const [shouldCopy, setShouldCopy] = React.useState(true);
+  const [showHelp, toggleHelp] = React.useState(false);
+  const [mute, toggleMic] = React.useState(true);
+  const [disableVideo, toggleVideo] = React.useState(true);
 
-    const getFormData = async () => {
-        chrome.storage.sync.get(STORAGE_KEY, function(items) {
-            if (items && Object.keys(items).length) {
-                const {accountId, shouldCopy} = items[STORAGE_KEY]
-                setAccountId(accountId)
-                setShouldCopy(shouldCopy)
-            }
-        });
-    }
+  const [formData, setFormData] = React.useState({
+    accountId: 0,
+    shouldCopy: true,
+    mute: true,
+    disableVideo: true
+  })
 
-    React.useEffect(() => {
-        getFormData()
-        btnRef.current.focus()
-    }, [])
+  const btnRef = React.createRef();
 
-    const gotoMeeting = async () => {
-        const meetingDetails = { accountId, shouldCopy }
-        chrome.storage.sync.set({[STORAGE_KEY]: meetingDetails}, function() {
-            const meetingURL = `https://meet.google.com/new?authuser=${accountId}`
-            window.open(meetingURL, "_blank")
-        });
-    }
+  const updateFormData = (params) => {
+    let state = formData
+    Object.keys(params).forEach(i => {
+      state = {...state, [i]: params[i]}
+    })
+    chrome.storage.sync.set({ [STORAGE_KEY]: state }, function () {
+      console.log('Saved config', state)
+      setFormData(state)
+    });
+  }
 
-    return (
-        <Box h="85%" color="black" py="12px" px="4px">
-            <Stack marginTop="16px">
-                <Box marginY="4px" d="flex" alignItems="center">
-                    <Label value={`Account Id`}/>
-                    <Input bg="gray.100" marginX="4px" size="sm" value={accountId} onChange={e => setAccountId(e.target.value)} placeholder="Enter account id" />
-                    <Icon color="teal.500" marginLeft="4px" cursor="pointer" name="question-outline" onClick={() => toggleHelp(!showHelp)} />
-                </Box>
-                {showHelp && <UserIdHelp/>}
-                <Checkbox isChecked={shouldCopy} onChange={e => {
-                    setShouldCopy(e.target.checked)}} size="md" variantColor="teal" color="gray.100" marginY="4px">
-                    Copy to Clipboard
-                </Checkbox>
-            </Stack>
-            <Box marginTop="16px">
-                <Button h="32px" ref={btnRef} onClick={() => gotoMeeting()} w="100%" variantColor="teal">Join Meeting <span className="btnDescription">(Press ⏎)</span> </Button>
-            </Box>
+  const getFormData = async () => {
+    chrome.storage.sync.get(STORAGE_KEY, function (items) {
+      if (items && Object.keys(items).length) {
+        setFormData(items[STORAGE_KEY])
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    getFormData();
+    btnRef.current.focus();
+  }, []);
+
+  const gotoMeeting = async () => {
+    // const meetingDetails = { accountId, shouldCopy };
+    chrome.storage.sync.set({ [STORAGE_KEY]: formData }, function () {
+      const meetingURL = `https://meet.google.com/new?authuser=${accountId}`;
+      window.open(meetingURL, '_blank');
+    });
+  };
+
+  return (
+    <Box h="85%" color="black" py="12px" px="4px">
+      <Stack marginTop="16px">
+        <Box marginY="4px" d="flex" alignItems="center">
+          <Label value={`Account Id`} />
+          <Input
+            bg="gray.100"
+            marginX="4px"
+            size="sm"
+            value={formData.accountId}
+            onChange={(e) => updateFormData({accountId: e.target.value})}
+            placeholder="Enter account id"
+          />
+          <Icon
+            color="teal.500"
+            marginLeft="4px"
+            cursor="pointer"
+            name="question-outline"
+            onClick={() => toggleHelp(!showHelp)}
+          />
         </Box>
-    )
-}
+        {showHelp && <UserIdHelp />}
+        <Checkbox
+          isChecked={formData.shouldCopy}
+          onChange={(e) => {
+            updateFormData({shouldCopy: e.target.checked});
+          }}
+          size="sm"
+          variantColor="teal"
+          color="gray.100"
+          marginY="4px"
+        >
+          Copy to Clipboard
+        </Checkbox>
 
-const Label = props => {
-    return (
-        <Box d="flex" alignItems="center" marginRight="8px">
-            <Text color="white" fontSize="md" width="96px">{props.value}</Text>
-        </Box>
-    )
-}
+        <Checkbox
+          isChecked={formData.mute}
+          onChange={(e) => {
+            updateFormData({'mute': e.target.checked})
+          }}
+          size="sm"
+          variantColor="teal"
+          color="gray.100"
+          marginY="4px"
+        >
+          Disable Audio
+        </Checkbox>
+
+        <Checkbox
+          isChecked={formData.disableVideo}
+          onChange={(e) => {
+            updateFormData({'disableVideo': e.target.checked})
+          }}
+          size="sm"
+          variantColor="teal"
+          color="gray.100"
+          marginY="4px"
+        >
+          Disable Video
+        </Checkbox>
+      </Stack>
+      <Box marginTop="16px">
+        <Button
+          h="32px"
+          ref={btnRef}
+          onClick={() => gotoMeeting()}
+          w="100%"
+          variantColor="teal"
+        >
+          Join Meeting <span className="btnDescription">(Press ⏎)</span>{' '}
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+const Label = (props) => {
+  return (
+    <Box d="flex" alignItems="center" marginRight="8px">
+      <Text color="white" fontSize="md" width="96px">
+        {props.value}
+      </Text>
+    </Box>
+  );
+};
 
 const UserIdHelp = () => {
-    return (
-        <Box bg="gray.600" d="flex" flexDir="column" borderRadius="2px" textAlign="center" p="2px" my="8px">
-            <Text fontSize="10px" color="gray.100">You can get account id from url such as below</Text>
-            <Code fontSize="8px" variantColor="gray.700" color="gray.50" children={<p> https://meet.google.com/{<strong>meeting_id</strong>}?authuser={<strong>user_id</strong>}</p>} />
-        </Box>
-    )
-}
+  return (
+    <Box
+      bg="gray.600"
+      d="flex"
+      flexDir="column"
+      borderRadius="2px"
+      textAlign="center"
+      p="2px"
+      my="8px"
+    >
+      <Text fontSize="10px" color="gray.100">
+        You can get account id from url such as below
+      </Text>
+      <Code
+        fontSize="8px"
+        variantColor="gray.700"
+        color="gray.100"
+        children={
+          <p>
+            {' '}
+            https://meet.google.com/{<strong>meeting_id</strong>}?authuser=
+            {<strong>user_id</strong>}
+          </p>
+        }
+      />
+    </Box>
+  );
+};
 
-export default MeetForm
+export default MeetForm;
