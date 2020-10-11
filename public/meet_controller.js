@@ -6,7 +6,8 @@ const MEET_QUERY = {
   JOIN_BTN: "[role=button]",
   MIC_BTN: `div[data-tooltip~=microphone]`,
   VIDEO_BTN: `div[data-tooltip~=camera]`,
-  CLOSE_BTN: `div[aria-label="Close"]`
+  CLOSE_BTN: `div[aria-label="Close"]`,
+  MODAL: `div[role="dialog"]`
 };
 
 var meetingUrl = null;
@@ -107,12 +108,12 @@ function disableVideo() {
 }
 
 function closeAddOthersModal() {
-  getElement(MEET_QUERY.CLOSE_BTN).then((res) => {
-    console.log(res, "res");
-    if (res) {
-      res.focus();
-      res.click();
-    }
-  });
+  if (document.querySelector(`div[role="dialog"]`)) {
+    getElement(MEET_QUERY.CLOSE_BTN).then((res) => {
+      if (res) {
+        res.focus();
+        res.click();
+      }
+    });
+  }
 }
-

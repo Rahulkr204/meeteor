@@ -1,6 +1,9 @@
 # Meeteor ⚡️ 
 
-Chrome extension for Google Meet, create and join meting with two keyboard shortcuts.
+Chrome extension for Google Meet, create and join meting with just two keyboard shortcuts.
+
+![Meeteor Popup]('/screenshot.png')
+***
 
 ## Description
 When you have multiple meetings, workshops or events and you want to create meetings on the fly, going through official process takes about 15-20s to join a meeting and have a shareable link. With Meeteor, you can cut that down to 3-5s.
@@ -16,7 +19,7 @@ When you have multiple meetings, workshops or events and you want to create meet
 7. Select the `/build` folder in this directory
 
 ## Features
-
+***
 ⌨️ `ctrl + shift + M` to fire Meeteor
 
 ⑉ Change Account Id to create meeting from different profile
