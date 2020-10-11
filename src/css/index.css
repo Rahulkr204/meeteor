@@ -1,0 +1,18 @@
+/*
+ * This is temporary styling and can be completed removed or replaced.
+ */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+.btnDescription {
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0 8px
+}
+.helpContainer {
+    font-size: 12px;
+    background-color: #010101;
+    border-radius: 2px;
+    padding: 2px;
+}

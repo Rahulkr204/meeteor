@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+  "name": "Meeteor ⚡️",
+  "description": "Chrome extension for Google Meet. Create and Join meeting using keyboard shortcut!",
+  "version": "1.0.0",
+  "icons": {
+    "128": "final.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "32": "final.png"
+    },
+    "default_popup": "index.html",
+    "default_title": "Open Popup"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["meet_controller.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["storage", "clipboardWrite", "clipboardRead"],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M",
+        "mac": "MacCtrl+Shift+M"
+      },
+      "description": "Toggle Popup"
+    }
+  }
+}
